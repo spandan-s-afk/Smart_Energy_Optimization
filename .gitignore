@@ -1,0 +1,33 @@
+# IDE settings
+.vscode/
+
+# Local backups
+app_folder_backup/
+
+# Python cache & virtual environments
+__pycache__/
+*.py[cod]
+*$py.class
+venv/
+env/
+.env
+
+# Large data/model artifacts (optional: comment out if you want them tracked)
+# data/
+# models/
+# results/
+
+# Large datasets and generated artifacts
+data/
+models/
+results/
+graphs/
+app_folder_backup/
+
+# Python environments and cache
+__pycache__/
+*.py[cod]
+venv/
+env/
+.venv/
+.env
