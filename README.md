@@ -1,10 +1,17 @@
 # Smart Energy Consumption Prediction and Optimization
 
-A Python project for household electricity-consumption analysis, machine-learning evaluation, peak-load analysis, and appliance scheduling with SciPy's mixed-integer linear optimization solver (MILP), presented through a Streamlit dashboard.
+A Python project for household electricity-consumption analysis, Random Forest prediction, peak-load analysis, and appliance scheduling with SciPy's mixed-integer linear optimization solver (MILP), presented through a Streamlit dashboard.
 
 ## Overview
 
-The project provides an interactive dashboard for exploring energy data, viewing prediction metrics, inspecting hourly demand, and comparing baseline and optimized load profiles.
+This project provides an interactive dashboard for exploring energy data, viewing prediction metrics, inspecting hourly demand, and comparing baseline and optimized load profiles.
+
+The project contains two related components:
+
+- **Prediction:** A Random Forest model estimates future appliance power using historical consumption and time-based features.
+- **Optimization:** A mixed-integer optimization routine selects appliance start times to reduce peak hourly load while respecting scheduling constraints.
+
+The available evaluation scripts assess these components separately. The current results do not establish that the optimizer directly uses the Random Forest model's predictions.
 
 ## Features
 
@@ -12,7 +19,7 @@ The project provides an interactive dashboard for exploring energy data, viewing
 - Random Forest model training and evaluation
 - Hourly energy-consumption analysis
 - Mixed-integer optimization for appliance scheduling
-- CSV results and graph visualizations
+- CSV evaluation outputs and graph visualizations
 
 ## Technologies
 
@@ -22,7 +29,7 @@ The project provides an interactive dashboard for exploring energy data, viewing
 - scikit-learn
 - SciPy
 - Matplotlib
-- Joblib
+- Joblib and Python pickle
 
 ## Evaluated Project Results
 
@@ -47,53 +54,71 @@ The following results were reproduced using the project's existing evaluation sc
 
 The optimization implementation in `src/optimization.py` uses `scipy.optimize.milp` to select appliance start times while minimizing maximum hourly load subject to scheduling constraints.
 
-These results describe the project's evaluation and modeled optimization scenario; they do not establish real-world household energy savings. The prediction metrics were reproduced using a reconstructed test set, and the original dataset provenance and complete evaluation workflow still require documentation.
+These results describe the project's evaluation and modeled optimization scenario; they do not establish real-world household energy savings. The prediction metrics were reproduced using a reconstructed test set. The original dataset provenance and complete evaluation workflow still require documentation.
+
 ## Repository Structure
 
 ```text
 Smart_Energy_Optimization/
 ├── app.py
 ├── src/
-│   ├── train_model.py
-│   └── optimization.py
-├── data/                 # Required data files; not included in GitHub
-├── models/               # Trained models; large model stored externally
+│   ├── data_preprocessing.py
+│   ├── evaluation.py
+│   ├── optimization.py
+│   ├── optimization_homec.py
+│   ├── peak_load_analysis.py
+│   ├── peak_load_homec.py
+│   ├── preprocess_homec.py
+│   ├── train_homec_model.py
+│   └── train_model.py
+├── data/                 # Required data files; not all are distributed
+├── models/               # Saved trained models; some files are large
 ├── graphs/               # Visualization outputs
-├── results/              # CSV outputs
+├── results/              # Evaluation CSV outputs
 ├── requirements.txt
 └── README.md
 ```
 
+This is a representative structure; the files available in a particular checkout may differ.
+
 ## Dataset and Model Files
 
-The Streamlit dashboard expects the processed dataset at:
+The dashboard and scripts use different input files. Obtain the correct files before running them.
+
+The dashboard and HomeC evaluation workflow expect the processed dataset at:
 
 ```text
 data/homec_processed.csv
 ```
 
-The training script `src/train_model.py` separately expects:
+The separate training script `src/train_model.py` expects:
 
 ```text
 data/processed_energy_data.csv
 ```
 
-The large trained model is expected at:
+The HomeC training script `src/train_homec_model.py` saves its model to:
+
+```text
+models/homec_random_forest_model.pkl
+```
+
+The separate training script `src/train_model.py` saves its model to:
 
 ```text
 models/random_forest_energy_model.pkl
 ```
 
-These files are excluded from the GitHub repository because of their size. **The original dataset source and public download location have not yet been verified for this repository.** Do not assume that a similarly named public dataset is the exact source. Before running the project, obtain the correct files from the project owner and ensure you have permission to use them.
+The original dataset source and public download location have not yet been verified for this repository. Do not assume a similarly named public dataset is the exact source. Before running the project, obtain the correct files from the project owner and ensure you have permission to use them.
 
-- Dataset download: **to be added after source verification**
-- Large model download: **to be added after external upload**
+- Dataset download: to be added after source verification
+- Large model download: to be added if an external upload is provided
 
-The smaller model `models/homec_random_forest_model.pkl` and the graph/result files may be present in the repository.
+Some datasets and trained model files may be excluded from GitHub because of their size. Check the repository's actual file list before assuming a particular file is available.
 
 ## Screenshots and Results
 
-The following figures are committed to the repository and provide a preview without requiring the dataset or trained model to run the dashboard.
+The following figures are expected to be available in the `graphs/` directory. If a linked image does not render on GitHub, check that the file is committed at the stated path.
 
 ### Predicted vs. Actual Power
 
@@ -110,7 +135,7 @@ The following figures are committed to the repository and provide a preview with
 ## Installation
 
 1. Install Python 3 and Git.
-2. Clone the repository:
+2. Clone the repository and enter the project directory:
 
    ```bash
    git clone https://github.com/spandan-s-afk/Smart_Energy_Optimization.git
@@ -128,24 +153,38 @@ The following figures are committed to the repository and provide a preview with
 
    ```bash
    python -m pip install --upgrade pip
-   pip install -r requirements.txt
+   python -m pip install -r requirements.txt
    ```
 
-5. Obtain the required dataset file and place it at `data/homec_processed.csv`. If you intend to run the training script, also provide `data/processed_energy_data.csv`.
+5. Obtain the required dataset file and place it at `data/homec_processed.csv`. If you intend to run `src/train_model.py`, also provide `data/processed_energy_data.csv`.
+
+The project may require additional setup depending on which dashboard pages and scripts you use.
 
 ## Run the Dashboard
 
 From the repository root, run:
 
-```powershell
+```bash
 streamlit run app.py
 ```
 
 Streamlit will display a local URL, usually `http://localhost:8501`, to open in your browser.
 
-## Train the Model (Optional)
+## Train the Models (Optional)
 
-After placing the expected training dataset at `data/processed_energy_data.csv`, run:
+### HomeC Random Forest Model
+
+After placing the required processed dataset at `data/homec_processed.csv`, run:
+
+```bash
+python src/train_homec_model.py
+```
+
+This script trains a Random Forest model, reports MAE, RMSE, and R² on its chronological test split, saves `models/homec_random_forest_model.pkl`, and generates a prediction graph. Running it retrains the model and overwrites the saved HomeC model.
+
+### Separate Energy Model
+
+After placing the expected dataset at `data/processed_energy_data.csv`, run:
 
 ```bash
 python src/train_model.py
@@ -155,10 +194,13 @@ This script writes `models/random_forest_energy_model.pkl`. Training may require
 
 ## Limitations
 
-- Required datasets and the large trained model are not bundled with the repository.
+- Required datasets and some trained model files may not be bundled with the repository.
 - The original dataset source and preprocessing provenance still need confirmation.
 - Prediction metrics depend on the data, feature engineering, and evaluation methodology.
-- Optimization results depend on the model's assumptions and scheduling constraints.
+- The reported prediction metrics were reproduced using a reconstructed chronological test set; this is not the same as confirming the original historical evaluation run.
+- Optimization results depend on the flexible-load assumption and scheduling constraints.
+- Results from the modeled scenario should not be interpreted as guaranteed real-world savings.
+- The relationship between the prediction output and the optimization inputs should not be assumed unless confirmed by the implementation.
 
 ## Author
 
