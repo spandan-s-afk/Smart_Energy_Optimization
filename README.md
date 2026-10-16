@@ -24,22 +24,30 @@ The project provides an interactive dashboard for exploring energy data, viewing
 - Matplotlib
 - Joblib
 
-## Reported Project Results
+## Evaluated Project Results
 
-These values are displayed by the current application/project outputs. The exact dataset and model run that produced each metric have not yet been traced and reproduced, so treat them as reported results rather than independently verified benchmarks.
+The following results were reproduced using the project's existing evaluation scripts and saved Random Forest model.
 
-| Metric | Reported value |
+| Metric | Evaluated result |
 |---|---:|
-| Peak monitored load before optimization | 5.4532 kW |
-| Peak monitored load after optimization | 4.6354 kW |
+| Peak monitored load before optimization | 5.453183 kW |
+| Peak monitored load after optimization | 4.635425 kW |
 | Peak-load reduction | 15.00% |
-| Daily energy consumption | 68.8273 kWh before and after |
+| Daily energy consumption before optimization | 68.827259 kWh |
+| Daily energy consumption after optimization | 68.827259 kWh |
 | Mean Absolute Error (MAE) | 0.302053 kW |
 | Root Mean Squared Error (RMSE) | 0.425657 kW |
 | R² score | 0.610869 |
 
-The optimization implementation in `src/optimization.py` uses `scipy.optimize.milp` to select appliance start times while minimizing the maximum hourly load subject to appliance scheduling constraints. The optimization assumptions and reported results do not guarantee real-world household energy savings.
+### Evaluation Methodology
 
+- **Prediction evaluation:** The existing saved Random Forest model was evaluated on a reconstructed chronological test set containing 6,700 samples. The resulting MAE, RMSE, and R² matched the values displayed in the dashboard.
+- **Optimization evaluation:** The evaluation script compared baseline and optimized monitored-load profiles, reporting a 15.00% reduction in peak load while maintaining the same daily energy consumption.
+- **Optimization assumptions:** The project assumes that 30% of flexible load can be shifted, subject to the appliance scheduling constraints.
+
+The optimization implementation in `src/optimization.py` uses `scipy.optimize.milp` to select appliance start times while minimizing maximum hourly load subject to scheduling constraints.
+
+These results describe the project's evaluation and modeled optimization scenario; they do not establish real-world household energy savings. The prediction metrics were reproduced using a reconstructed test set, and the original dataset provenance and complete evaluation workflow still require documentation.
 ## Repository Structure
 
 ```text
