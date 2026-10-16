@@ -1,0 +1,5 @@
+Appliance,Start Hour,End Hour,Power (kW),Duration (hours)
+Washing Machine,9,11,0.8,2
+Dishwasher,19,21,1.2,2
+Water Heater,14,16,2.0,2
+EV Charger,3,6,3.0,3

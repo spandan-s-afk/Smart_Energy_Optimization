@@ -4,30 +4,16 @@
 # Local backups
 app_folder_backup/
 
-# Python cache & virtual environments
-__pycache__/
-*.py[cod]
-*$py.class
-venv/
-env/
-.env
-
-# Large data/model artifacts (optional: comment out if you want them tracked)
-# data/
-# models/
-# results/
-
-# Large datasets and generated artifacts
-data/
-models/
-results/
-graphs/
-app_folder_backup/
-
-# Python environments and cache
+# Python cache and environments
 __pycache__/
 *.py[cod]
 venv/
 env/
 .venv/
 .env
+
+# Large datasets stored externally
+data/
+
+# Huge trained model stored externally
+models/random_forest_energy_model.pkl
