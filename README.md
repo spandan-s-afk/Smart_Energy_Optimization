@@ -1,6 +1,6 @@
 # Smart Energy Consumption Prediction and Optimization
 
-A Python project for household electricity-consumption analysis, machine-learning evaluation, peak-load analysis, and numerical optimization, presented through a Streamlit dashboard.
+A Python project for household electricity-consumption analysis, machine-learning evaluation, peak-load analysis, and appliance scheduling with SciPy's mixed-integer linear optimization solver (MILP), presented through a Streamlit dashboard.
 
 ## Overview
 
@@ -26,7 +26,7 @@ The project provides an interactive dashboard for exploring energy data, viewing
 
 ## Reported Project Results
 
-These values are reported by the current application and project outputs. The metric values should be independently reproduced before being presented as verified benchmark results.
+These values are displayed by the current application/project outputs. The exact dataset and model run that produced each metric have not yet been traced and reproduced, so treat them as reported results rather than independently verified benchmarks.
 
 | Metric | Reported value |
 |---|---:|
@@ -38,7 +38,7 @@ These values are reported by the current application and project outputs. The me
 | Root Mean Squared Error (RMSE) | 0.425657 kW |
 | R² score | 0.610869 |
 
-The optimization assumes that a portion of flexible appliance load can be shifted subject to the scheduling constraints. These modeled results do not guarantee real-world household energy savings.
+The optimization implementation in `src/optimization.py` uses `scipy.optimize.milp` to select appliance start times while minimizing the maximum hourly load subject to appliance scheduling constraints. The optimization assumptions and reported results do not guarantee real-world household energy savings.
 
 ## Repository Structure
 
@@ -82,6 +82,22 @@ These files are excluded from the GitHub repository because of their size. **The
 - Large model download: **to be added after external upload**
 
 The smaller model `models/homec_random_forest_model.pkl` and the graph/result files may be present in the repository.
+
+## Screenshots and Results
+
+The following figures are committed to the repository and provide a preview without requiring the dataset or trained model to run the dashboard.
+
+### Predicted vs. Actual Power
+
+![Predicted vs. actual power](graphs/predicted_vs_actual.png)
+
+### Hourly Peak Load
+
+![Hourly peak load](graphs/hourly_peak_load_homec.png)
+
+### Before and After Optimization
+
+![Before and after optimization](graphs/before_after_comparison.png)
 
 ## Installation
 
