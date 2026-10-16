@@ -1,33 +1,34 @@
 # Smart Energy Consumption Prediction and Optimization
 
-A Data Science project that explores household electricity consumption forecasting and peak-load optimization using Python, machine learning, and numerical optimization.
+A Python project for household electricity-consumption analysis, machine-learning evaluation, peak-load analysis, and numerical optimization, presented through a Streamlit dashboard.
 
 ## Overview
 
-This project analyzes electricity consumption patterns, evaluates predicted power usage, and explores how flexible appliance loads can be scheduled to reduce peak monitored demand while maintaining daily energy requirements.
+The project provides an interactive dashboard for exploring energy data, viewing prediction metrics, inspecting hourly demand, and comparing baseline and optimized load profiles.
 
-## Objectives
+## Features
 
-- Analyze historical electricity consumption.
-- Predict power usage using machine learning.
-- Identify peak-demand periods.
-- Explore appliance scheduling through numerical optimization.
-- Compare energy profiles before and after optimization.
+- Streamlit dashboard with dataset, prediction, peak-load, and optimization views
+- Random Forest model training and evaluation
+- Hourly energy-consumption analysis
+- Mixed-integer optimization for appliance scheduling
+- CSV results and graph visualizations
 
-## Technologies Used
+## Technologies
 
-- Python
-- Pandas
-- NumPy
+- Python 3
+- Streamlit
+- Pandas and NumPy
 - scikit-learn
 - SciPy
 - Matplotlib
+- Joblib
 
-## Project Results
+## Reported Project Results
 
-Reported results from the project evaluation:
+These values are reported by the current application and project outputs. The metric values should be independently reproduced before being presented as verified benchmark results.
 
-| Metric | Result |
+| Metric | Reported value |
 |---|---:|
 | Peak monitored load before optimization | 5.4532 kW |
 | Peak monitored load after optimization | 4.6354 kW |
@@ -37,48 +38,103 @@ Reported results from the project evaluation:
 | Root Mean Squared Error (RMSE) | 0.425657 kW |
 | R² score | 0.610869 |
 
-These figures represent project evaluation results and do not establish real-world household energy savings. The optimization assumes that 30% of flexible load can be shifted, subject to the project's scheduling constraints.
+The optimization assumes that a portion of flexible appliance load can be shifted subject to the scheduling constraints. These modeled results do not guarantee real-world household energy savings.
 
-## Project Structure
+## Repository Structure
 
 ```text
-.
+Smart_Energy_Optimization/
 ├── app.py
 ├── src/
-├── results/
-├── graphs/
+│   ├── train_model.py
+│   └── optimization.py
+├── data/                 # Required data files; not included in GitHub
+├── models/               # Trained models; large model stored externally
+├── graphs/               # Visualization outputs
+├── results/              # CSV outputs
+├── requirements.txt
 └── README.md
 ```
 
-The exact structure may vary depending on the files included in the repository.
+## Dataset and Model Files
 
-## Dataset
+The Streamlit dashboard expects the processed dataset at:
 
-The application expects a processed dataset at:
-
-`data/homec_processed.csv`
-
-The dataset source, access instructions, and any applicable usage restrictions should be documented here before running the project.
-
-## How to Run
-
-1. Install Python 3 and Git.
-2. Clone this repository.
-3. Install the dependencies listed in `requirements.txt`, if provided.
-4. Obtain the required dataset and place it at `data/homec_processed.csv`.
-5. Run the application:
-
-```bash
-python app.py
+```text
+data/homec_processed.csv
 ```
 
-Additional setup steps may be required depending on the application's dependencies.
+The training script `src/train_model.py` separately expects:
+
+```text
+data/processed_energy_data.csv
+```
+
+The large trained model is expected at:
+
+```text
+models/random_forest_energy_model.pkl
+```
+
+These files are excluded from the GitHub repository because of their size. **The original dataset source and public download location have not yet been verified for this repository.** Do not assume that a similarly named public dataset is the exact source. Before running the project, obtain the correct files from the project owner and ensure you have permission to use them.
+
+- Dataset download: **to be added after source verification**
+- Large model download: **to be added after external upload**
+
+The smaller model `models/homec_random_forest_model.pkl` and the graph/result files may be present in the repository.
+
+## Installation
+
+1. Install Python 3 and Git.
+2. Clone the repository:
+
+   ```bash
+   git clone https://github.com/spandan-s-afk/Smart_Energy_Optimization.git
+   cd Smart_Energy_Optimization
+   ```
+
+3. (Recommended) Create and activate a virtual environment on Windows PowerShell:
+
+   ```powershell
+   python -m venv .venv
+   .\.venv\Scripts\Activate.ps1
+   ```
+
+4. Install the dependencies:
+
+   ```bash
+   python -m pip install --upgrade pip
+   pip install -r requirements.txt
+   ```
+
+5. Obtain the required dataset file and place it at `data/homec_processed.csv`. If you intend to run the training script, also provide `data/processed_energy_data.csv`.
+
+## Run the Dashboard
+
+From the repository root, run:
+
+```powershell
+streamlit run app.py
+```
+
+Streamlit will display a local URL, usually `http://localhost:8501`, to open in your browser.
+
+## Train the Model (Optional)
+
+After placing the expected training dataset at `data/processed_energy_data.csv`, run:
+
+```bash
+python src/train_model.py
+```
+
+This script writes `models/random_forest_energy_model.pkl`. Training may require substantial memory and processing time depending on dataset size.
 
 ## Limitations
 
-- Model performance depends on the dataset and evaluation methodology.
-- Optimization results depend on the assumed flexible-load proportion and scheduling constraints.
-- Evaluation results should not be interpreted as guaranteed real-world savings.
+- Required datasets and the large trained model are not bundled with the repository.
+- The original dataset source and preprocessing provenance still need confirmation.
+- Prediction metrics depend on the data, feature engineering, and evaluation methodology.
+- Optimization results depend on the model's assumptions and scheduling constraints.
 
 ## Author
 
@@ -86,4 +142,4 @@ Spandan
 
 ## Disclaimer
 
-This project is intended for academic and educational purposes.
+This project is intended for academic and educational purposes. Confirm the data license and model provenance before redistribution.
